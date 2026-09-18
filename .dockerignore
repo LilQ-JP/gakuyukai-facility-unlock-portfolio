@@ -1,0 +1,7 @@
+.env
+data
+tailscale-state
+node_modules
+npm-debug.log
+.DS_Store
+.git

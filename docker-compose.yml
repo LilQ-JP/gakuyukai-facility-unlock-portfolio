@@ -1,0 +1,40 @@
+services:
+  facility-unlock:
+    build: .
+    container_name: facility-reservation-switchbot
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      HOST: 0.0.0.0
+      TZ: Asia/Tokyo
+    ports:
+      - "8787:8787"
+    volumes:
+      - ./data:/app/data
+
+  # Optional: publish the app with a stable HTTPS *.ts.net URL at no domain cost.
+  # Start with: docker compose --profile tailscale up -d
+  tailscale:
+    profiles:
+      - tailscale
+    image: tailscale/tailscale:stable
+    container_name: facility-reservation-tailscale
+    hostname: facility-reservation
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      TS_AUTHKEY: ${TAILSCALE_AUTHKEY}
+      TS_AUTH_ONCE: "true"
+      TS_HOSTNAME: facility-reservation
+      TS_STATE_DIR: /var/lib/tailscale
+    volumes:
+      - ./tailscale-state:/var/lib/tailscale
+
+  # Use this when publishing the NAS-hosted app without opening router ports.
+  # Set CLOUDFLARE_TUNNEL_TOKEN in .env, then uncomment this service.
+  # cloudflared:
+  #   image: cloudflare/cloudflared:latest
+  #   container_name: facility-reservation-tunnel
+  #   restart: unless-stopped
+  #   command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_TOKEN}

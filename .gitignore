@@ -1,0 +1,17 @@
+node_modules/
+.env
+.env.*
+!.env.example
+
+# Runtime data can contain organization information, reservations, sessions,
+# generated passcodes, audit events, and real SwitchBot device identifiers.
+data/*
+!data/.gitkeep
+data/backups/
+tailscale-state/
+
+# Local and deployment artifacts
+*.log
+.DS_Store
+npm-debug.log*
+coverage/
